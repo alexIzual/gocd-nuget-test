@@ -41,18 +41,18 @@ pipelines:
                     working_directory: My.Common/
                     command: for
                     arguments:
-                      - proj
+                      - /F
+                      - "%%proj"
                       - in
                       - $(git
                       - diff
                       - HEAD^
                       - HEAD
                       - --name-only
-                      - "*.csproj);"
+                      - "*.csproj)"
                       - do
                       - echo
-                      - $proj;
-                      - done
+                      - "%%proj"
       - unit_tests:
           jobs:
             unit_tests:
