@@ -37,7 +37,7 @@ pipelines:
                       - --verbosity
                       - quiet
                       - --no-restore
-                - script: bash -c 'echo *'
+                - script: echo *.csproj
                 - exec:
                     working_directory: My.Common/
                     command: bash.exe
