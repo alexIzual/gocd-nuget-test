@@ -39,20 +39,10 @@ pipelines:
                       - --no-restore
                 - exec:
                     working_directory: My.Common/
-                    command: for
+                    command: bash 
                     arguments:
-                      - /F
-                      - "%%proj"
-                      - in
-                      - $(git
-                      - diff
-                      - HEAD^
-                      - HEAD
-                      - --name-only
-                      - "*.csproj)"
-                      - do
-                      - echo
-                      - "%%proj"
+                      - -c
+                      - "echo *"
       - unit_tests:
           jobs:
             unit_tests:
