@@ -41,8 +41,7 @@ pipelines:
                     working_directory: My.Common/
                     command: bash
                     arguments:
-                      - -c
-                      - \"echo *.nupkg\"
+                      - -v
       - unit_tests:
           jobs:
             unit_tests:
