@@ -39,7 +39,7 @@ pipelines:
           jobs:
             test_script:
               tasks:
-                - script: export LANG=C.UTF-8 | for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do echo $proj; done
+                - script: LC_CTYPE=en_US.utf8 | for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do echo $proj; done
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
