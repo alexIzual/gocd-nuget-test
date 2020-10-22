@@ -58,13 +58,14 @@ pipelines:
                     working_directory: packages/
                     command: bash
                     arguments:
-                     - -c
-                     - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source './nugetpkgstorage'; done"
+                      - -c
+                      - echo *.nupkg
                 - exec:
                     working_directory: packages/
                     command: bash
-                    arguments: 
-                      - echo *.nupkg
+                    arguments:
+                      - -c
+                      - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source 'Package source 1'; done"
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
