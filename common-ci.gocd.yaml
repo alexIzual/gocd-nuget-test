@@ -37,8 +37,6 @@ pipelines:
                       - --verbosity
                       - quiet
                       - --no-restore
-                      - --verbosity
-                      - quiet
                 - exec:
                     working_directory: My.Common/
                     command: bash
