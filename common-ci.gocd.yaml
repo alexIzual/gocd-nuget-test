@@ -19,8 +19,6 @@ pipelines:
       - build:
           jobs:
             build:
-              resources:
-                - bash
               tasks:
                 - exec:
                     working_directory: My.Common/
