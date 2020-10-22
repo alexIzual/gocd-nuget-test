@@ -52,13 +52,18 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - "for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output packages --version-suffix Beta20201023; done"
+                      - "for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output My.Common/packages --version-suffix Beta20201023; done"
                 - exec:
-                    working_directory: packages/
+                    working_directory: My.Common/packages/
                     command: bash
                     arguments:
                      - -c
                      - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source nuget_pkg_storage; done"
+                - exec:
+                    working_directory: My.Common/packages/
+                    command: bash
+                    arguments: 
+                      - echo *.nupkg
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
