@@ -56,11 +56,6 @@ pipelines:
                       - test
                       - -v
                       - normal
-      - test:
-          jobs:
-            test_script:
-              tasks:
-                - script:
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
