@@ -18,6 +18,8 @@ pipelines:
     stages:
       - build:
           jobs:
+            resources:
+              - bash
             build:
               tasks:
                 - exec:
@@ -37,10 +39,9 @@ pipelines:
                       - --verbosity
                       - quiet
                       - --no-restore
-                - script: echo *.csproj
                 - exec:
                     working_directory: My.Common/
-                    command: bash.exe
+                    command: bash
                     arguments:
                       - -c
                       - echo 123
