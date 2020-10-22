@@ -18,9 +18,9 @@ pipelines:
     stages:
       - build:
           jobs:
-            resources:
-              - bash
             build:
+              resources:
+                - bash
               tasks:
                 - exec:
                     working_directory: My.Common/
@@ -60,7 +60,7 @@ pipelines:
           jobs:
             test_script:
               tasks:
-                - script: 
+                - script:
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
