@@ -23,7 +23,35 @@ pipelines:
                     working_directory: My.Common/
                     command: dotnet
                     arguments:
+                      - restore
+                      - --verbosity
+                      - quiet
+                - exec:
+                    working_directory: My.Common/
+                    command: dotnet
+                    arguments:
                       - build
+                      - --configuretaion
+                      - Release
+                      - --verbosity
+                      - quiet
+                      - --no-restore
+                - exec:
+                    working_directory: My.Common/
+                    command: for
+                    arguments:
+                      - proj
+                      - in
+                      - $(git
+                      - diff
+                      - HEAD^
+                      - HEAD
+                      - --name-only
+                      - '*.csproj);'
+                      - do
+                      - echo
+                      - $proj;
+                      - done
       - unit_tests:
           jobs:
             unit_tests:
@@ -39,7 +67,7 @@ pipelines:
           jobs:
             test_script:
               tasks:
-                - script: for proj in $(git diff HEAD^ HEAD --name-only *.csproj) | do echo $proj | done
+                - script: for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do echo $proj; done
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
