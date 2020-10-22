@@ -41,9 +41,7 @@ pipelines:
                     working_directory: My.Common/
                     command: bash
                     arguments:
-                      - -c
-                      - echo
-                      - "*"
+                      - -c echo *
       - unit_tests:
           jobs:
             unit_tests:
