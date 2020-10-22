@@ -42,7 +42,7 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - echo *.nupkg
+                      - \"echo *.nupkg\"
       - unit_tests:
           jobs:
             unit_tests:
