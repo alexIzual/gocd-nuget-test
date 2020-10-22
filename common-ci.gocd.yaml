@@ -39,7 +39,7 @@ pipelines:
                       - --no-restore
                 - exec:
                     working_directory: My.Common/
-                    command: /bin/bash
+                    command: bash.exe
                     arguments:
                       - -c
                       - echo 123
