@@ -1,0 +1,67 @@
+format_version: 10
+environments:
+  dev_env:
+    pipelines:
+      - publish-nuget
+      - build-common
+pipelines:
+  build-common:
+    group: build-common-group
+    label_template: "${commongit[:8]}"
+    materials:
+      commongit:
+        git: https://github.com/alexIzual/gocd-nuget-test.git
+        branch: master
+        whitelist:
+          - My.Common/**/*.*
+    stages:
+      - build:
+          jobs:
+            build:
+              tasks:
+                - exec:
+                    working_directory: My.Common/
+                    command: dotnet
+                    arguments:
+                      - build
+      - unit_tests:
+          jobs:
+            unit_tests:
+              tasks:
+                - exec:
+                    working_directory: My.Common/
+                    command: dotnet
+                    arguments:
+                      - test
+                      - -v
+                      - normal
+      - test:
+          jobs:
+            test_script:
+              tasks:
+                script: for i in $(git diff HEAD^ HEAD --name-only origin/master *.csproj); do echo $i; done
+  publish-nuget:
+    group: deploy-common-group
+    label_template: "${commongit[:8]}"
+    locking: off
+    materials:
+      commongit:
+        git: https://github.com/alexIzual/gocd-nuget-test.git
+        branch: master
+        whitelist:
+          - My.Common/**/*.*
+      upstream:
+        pipeline: build-common
+        stage: unit_tests
+    stages:
+      - build:
+          approval: manual
+          clean_workspace: true
+          jobs:
+            publish:
+              tasks:
+                - exec:
+                    command: dotnet
+                    working_directory: My.Common/
+                    arguments:
+                      - "publish -c Release"
