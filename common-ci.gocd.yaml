@@ -59,7 +59,7 @@ pipelines:
                     command: bash
                     arguments:
                      - -c
-                     - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source 'nuget_pkg_storage'; done"
+                     - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source 'My.Common/nugetpkgstorage'; done"
                 - exec:
                     working_directory: My.Common/packages/
                     command: bash
