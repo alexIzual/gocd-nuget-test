@@ -28,6 +28,7 @@ pipelines:
                       - -v
                       - normal
       - build:
+          clean_workspace: true
           jobs:
             build:
               tasks:
@@ -58,7 +59,7 @@ pipelines:
                     command: bash
                     arguments:
                      - -c
-                     - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source nuget_pkg_storage; done"
+                     - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source 'nuget_pkg_storage'; done"
                 - exec:
                     working_directory: My.Common/packages/
                     command: bash
