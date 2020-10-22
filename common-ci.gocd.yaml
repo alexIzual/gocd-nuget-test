@@ -39,7 +39,7 @@ pipelines:
           jobs:
             test_script:
               tasks:
-                script: for i in $(git diff HEAD^ HEAD --name-only origin/master *.csproj); do echo $i; done
+                - script: for i in $(git diff HEAD^ HEAD --name-only origin/master *.csproj); do echo $i; done
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
