@@ -31,7 +31,7 @@ pipelines:
                     command: dotnet
                     arguments:
                       - build
-                      - --configuretaion
+                      - --configurataion
                       - Release
                       - --verbosity
                       - quiet
