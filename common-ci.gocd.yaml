@@ -39,9 +39,10 @@ pipelines:
                       - --no-restore
                 - exec:
                     working_directory: My.Common/
-                    command: bash
+                    command: /bin/bash
                     arguments:
-                      - -v
+                      - -c
+                      - echo 123
       - unit_tests:
           jobs:
             unit_tests:
