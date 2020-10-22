@@ -16,6 +16,17 @@ pipelines:
           - My.Common/**/*.*
           - /*.yaml
     stages:
+      - unit_tests:
+          jobs:
+            unit_tests:
+              tasks:
+                - exec:
+                    working_directory: My.Common/
+                    command: dotnet
+                    arguments:
+                      - test
+                      - -v
+                      - normal
       - build:
           jobs:
             build:
@@ -38,22 +49,16 @@ pipelines:
                       - quiet
                       - --no-restore
                 - exec:
-                    working_directory: My.Common/
                     command: bash
                     arguments:
                       - -c
-                      - echo 123
-      - unit_tests:
-          jobs:
-            unit_tests:
-              tasks:
+                      - "for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output packages --version-suffix Beta20201023; done"
                 - exec:
-                    working_directory: My.Common/
-                    command: dotnet
+                    working_directory: packages/
+                    command: bash
                     arguments:
-                      - test
-                      - -v
-                      - normal
+                     - -c
+                     - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source nuget_pkg_storage; done"
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
