@@ -47,7 +47,7 @@ pipelines:
                       - HEAD^
                       - HEAD
                       - --name-only
-                      - '*.csproj);'
+                      - "*.csproj);"
                       - do
                       - echo
                       - $proj;
