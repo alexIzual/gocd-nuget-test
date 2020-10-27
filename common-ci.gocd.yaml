@@ -53,7 +53,7 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - "for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix Beta20201023; done"
+                      - "for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix Beta$(date '+%Y%m%d%H%M%S'); done"
                 - exec:
                     working_directory: packages/
                     command: bash
