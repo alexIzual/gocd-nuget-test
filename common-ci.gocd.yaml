@@ -55,7 +55,7 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done echo $suff;"
+                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff' && echo 'Beta$suff'; done "
                 - exec:
                     command: bash
                     arguments:
