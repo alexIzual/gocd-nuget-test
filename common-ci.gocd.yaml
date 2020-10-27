@@ -7,7 +7,7 @@ environments:
 pipelines:
   build-common:
     environment_variables:
-      ENV_VAR: "{{SECRET:[MyHomeSecrets][secret_key]}}"
+      ENV_VAR: "{{SECRET:[MyHomeSecrets][NUGET_APIKEY]}}"
     group: build-common-group
     label_template: "${commongit[:8]}"
     materials:
