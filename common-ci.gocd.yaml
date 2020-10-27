@@ -55,19 +55,17 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done"
+                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done echo $suff;"
                 - exec:
-                    working_directory: packages/
                     command: bash
                     arguments:
                       - -c
                       - echo $DEPLOYMENT
                 - exec:
-                    working_directory: packages/
                     command: bash
                     arguments:
                       - -c
-                      - "for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source 'Package source 1'; done"
+                      - "[ -d \"/packages\" ] && cd 'packages'; for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source 'Package source 1'; done"
   publish-nuget:
     group: deploy-common-group
     label_template: "${commongit[:8]}"
