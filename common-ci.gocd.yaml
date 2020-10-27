@@ -6,6 +6,8 @@ environments:
       - build-common
 pipelines:
   build-common:
+    environment_variables:
+      DEPLOYMENT: testing
     group: build-common-group
     label_template: "${commongit[:8]}"
     materials:
@@ -53,13 +55,13 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - "suff=$(date '+%Y%m%d%H%M%S'); for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done"
+                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done"
                 - exec:
                     working_directory: packages/
                     command: bash
                     arguments:
                       - -c
-                      - echo *.nupkg
+                      - echo $DEPLOYMENT
                 - exec:
                     working_directory: packages/
                     command: bash
