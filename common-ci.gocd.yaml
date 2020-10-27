@@ -19,7 +19,7 @@ pipelines:
           - /*.yaml
     stages:
       - unit_tests:
-          jobs:
+          jobs: 
             unit_tests:
               tasks:
                 - exec:
