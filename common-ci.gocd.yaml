@@ -23,7 +23,7 @@ pipelines:
             unit_tests:
               tasks:
                 - exec:
-                    working_directory: src/
+                    working_directory: My.Common/
                     command: dotnet
                     arguments:
                       - test
@@ -36,14 +36,14 @@ pipelines:
             build:
               tasks:
                 - exec:
-                    working_directory: src/
+                    working_directory: My.Common/
                     command: dotnet
                     arguments:
                       - restore
                       - --verbosity
                       - quiet
                 - exec:
-                    working_directory: src/
+                    working_directory: My.Common/
                     command: dotnet
                     arguments:
                       - build
