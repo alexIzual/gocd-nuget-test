@@ -1,13 +1,14 @@
 format_version: 10
 environments:
-  dev_env:
+  test:
     pipelines:
       - publish-nuget
       - build-common
 pipelines:
   build-common:
     environment_variables:
-      ENV_VAR: "{{SECRET:[MyHomeSecrets][NUGET_APIKEY]}}"
+      NUGET_SRC: http://178.154.230.139:808/v3/index.json
+      NUGET_APIKEY: "{{SECRET:[Nuget][apikey]}}"
     group: build-common-group
     label_template: "${commongit[:8]}"
     materials:
@@ -19,30 +20,31 @@ pipelines:
           - /*.yaml
     stages:
       - unit_tests:
-          jobs: 
+          jobs:
             unit_tests:
               tasks:
                 - exec:
-                    working_directory: My.Common/
+                    working_directory: src/
                     command: dotnet
                     arguments:
                       - test
-                      - -v
+                      - --verbosity
                       - normal
       - build:
+          approval: manual
           clean_workspace: true
           jobs:
             build:
               tasks:
                 - exec:
-                    working_directory: My.Common/
+                    working_directory: src/
                     command: dotnet
                     arguments:
                       - restore
                       - --verbosity
                       - quiet
                 - exec:
-                    working_directory: My.Common/
+                    working_directory: src/
                     command: dotnet
                     arguments:
                       - build
@@ -55,40 +57,35 @@ pipelines:
                     command: bash
                     arguments:
                       - -c
-                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done; echo 'Beta$suff'"
+                      - "suff=`date '+%Y%m%d%H%M%S'`; for proj in $(git diff HEAD^ HEAD --name-only *.csproj); do dotnet pack $proj --configuration Release --no-build --output './packages' --version-suffix 'Beta$suff'; done"
                 - exec:
                     command: bash
                     arguments:
                       - -c
-                      - echo $ENV_VAR
-                - exec:
-                    command: bash
-                    arguments:
-                      - -c
-                      - '[ -d "/packages" ] && cd ''packages''; for pkg in $(echo *.nupkg); do dotnet nuget push $pkg --source ''Package source 1''; done'
-  publish-nuget:
-    group: deploy-common-group
-    label_template: "${commongit[:8]}"
-    locking: off
-    materials:
-      commongit:
-        git: https://github.com/alexIzual/gocd-nuget-test.git
-        branch: master
-        whitelist:
-          - My.Common/**/*.*
-          - /*.yaml
-      upstream:
-        pipeline: build-common
-        stage: unit_tests
-    stages:
-      - build:
-          approval: manual
-          clean_workspace: true
-          jobs:
-            publish:
-              tasks:
-                - exec:
-                    command: dotnet
-                    working_directory: My.Common/
-                    arguments:
-                      - "publish -c Release"
+                      - '[ -d "/packages" ] && cd ''packages''; for pkg in $(echo *.nupkg); do dotnet nuget push -s $NUGET_SRC -k $NUGET_APIKEY $pkg; done'
+  # publish-nuget:
+  #   group: deploy-common-group
+  #   label_template: "${commongit[:8]}"
+  #   locking: off
+  #   materials:
+  #     commongit:
+  #       git: https://github.com/alexIzual/gocd-nuget-test.git
+  #       branch: master
+  #       whitelist:
+  #         - My.Common/**/*.*
+  #         - /*.yaml
+  #     upstream:
+  #       pipeline: build-common
+  #       stage: unit_tests
+  #   stages:
+  #     - build:
+  #         approval: manual
+  #         clean_workspace: true
+  #         jobs:
+  #           publish:
+  #             tasks:
+  #               - exec:
+  #                   command: dotnet
+  #                   working_directory: My.Common/
+  #                   arguments:
+  #                     - "publish -c Release"
