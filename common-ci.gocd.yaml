@@ -2,7 +2,6 @@ format_version: 10
 environments:
   test:
     pipelines:
-      - publish-nuget
       - build-common
 pipelines:
   build-common:
